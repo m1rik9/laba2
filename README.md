@@ -26,25 +26,94 @@ def count_code_words():
     
     return len(words)
 
-# Вызов функции
 result1 = count_code_words()
 print(f"Задача 1: {result1}")
 ```
 <img width="435" height="50" alt="image" src="https://github.com/user-attachments/assets/4c72a3b3-f859-414a-a208-700befaf6e78" />
 
-### Задание 01: Значение арифметического выражения
+### Задание 02: Значение арифметического выражения
 **Задание:** Значение арифметического выражения 4910+730–49  49^{10} + 7^{30} – 49  4910+730–49   записали в системе счисления с основанием 7. Сколько цифр 6 содержится в этой записи?
 
-**Решение:** 
+**Решение:** Выражение преобразовано с использованием свойств степеней: $49=7^2$, поэтому $49^10=(7^2)^10=7^20$. Таким образом, исходное выражение принимает вид $7^20+7^30−7^2.
+```python
+def z2():
+    res = 49**10 + 7**30 - 49
+    digits = []
+    n = res
+    while n > 0:
+        digits.append(str(n % 7))
+        n //= 7
+    base7 = ''.join(reversed(digits))
+    
+    # Подсчитываем количество цифр '6'
+    count = base7.count('6')
+    
+    print(f"Выражение: 49^10 + 7^30 - 49")
+    print(f"Значение в 7-ричной системе: {base7}")
+    print(f"Количество цифр 6: {count}")
+    return count
+
+if __name__ == "__main__":
+    result = z2()
 ```
+<img width="501" height="112" alt="image" src="https://github.com/user-attachments/assets/e5a7d660-d6bd-48a3-b722-3d7cdd790d73" />
+
+### Задание 03: Числа с шестью делителями
+**Задание:** Найдите среди целых чисел, принадлежащих числовому отрезку [174457;174505] [174457; 174505] [174457;174505], числа, имеющие ровно два различных натуральных делителя, не считая единицы и самого числа. Для каждого найденного числа запишите эти два делителя в два соседних столбца на экране с новой строки в порядке возрастания произведения этих двух делителей. Делители в строке также должны следовать в порядке возрастания. Например, в диапазоне [5; 9] [5; 9] [5; 9] ровно два различных натуральных делителя имеют числа 6 и 8, поэтому для этого диапазона вывод на экран должен содержать следующие значения:
+
+**Решение:**  Разработана функция для нахождения всех делителей числа путем перебора до квадратного корня. Для каждого числа в заданном диапазоне вычисляются делители и проверяется их количество. Если найдено ровно 6 делителей, они выводятся в требуемом формате.
+```python
+import math
+
+def find_numbers_with_six_divisors(start, end):
+    """
+    Поиск чисел на отрезке [start, end], имеющих ровно 6 делителей.
+    """
+    def get_divisors(n):
+        """Возвращает отсортированный список всех делителей числа n."""
+        divisors = []
+        for i in range(1, int(math.sqrt(n)) + 1):
+            if n % i == 0:
+                divisors.append(i)
+                if i != n // i:
+                    divisors.append(n // i)
+        return sorted(divisors)
+    
+    results = []
+    for num in range(start, end + 1):
+        divisors = get_divisors(num)
+        if len(divisors) == 6:
+            results.append(divisors)
+    
+    return results
+
+# Основная часть программы
+if __name__ == "__main__":
+    start, end = 312614, 312651
+    
+    print(f"Поиск чисел с ровно 6 делителями в диапазоне [{start}; {end}]")
+    print("=" * 60)
+    
+    results = find_numbers_with_six_divisors(start, end)
+    
+    if results:
+        print("Найденные числа и их 6 делителей:")
+        print("=" * 60)
+        for divisors in results:
+            # Вывод 6 делителей в шести столбцах
+            print(f"{divisors[0]:6} {divisors[1]:6} {divisors[2]:6} "
+                  f"{divisors[3]:6} {divisors[4]:6} {divisors[5]:6}")
+    else:
+        print("Чисел с ровно шестью делителями не найдено.")
+    
+    print("=" * 60)
+    print(f"Проверено чисел: {end - start + 1}")
+    print(f"Найдено чисел: {len(results)}")
+```
+<img width="382" height="224" alt="image" src="https://github.com/user-attachments/assets/0a516c9b-bb40-4c43-aad4-ed8051dc7d24" />
 
 
-
-
-
-
-
-
-
-
-
+## Список использованных источников
+1. [math — Mathematical functions](https://docs.python.org/3/library/itertools.html)
+2. [itertools — Functions creating iterators for efficient looping¶](https://docs.python.org/3/library/itertools.html)
+3. [Системы счисления — Википедия](https://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D1%81%D1%87%D0%B8%D1%81%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F)
